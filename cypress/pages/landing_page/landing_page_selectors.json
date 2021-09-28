@@ -1,0 +1,6 @@
+{
+  "landingPageSelectors": {
+    "@userName": "[data-test=\"sidenav-username\"]",
+    "logoutBtn": "[data-test=\"sidenav-signout\"]"
+  }
+}
