@@ -1,4 +1,4 @@
-import { LoginSelectors } from "./auth_selectors";
+import { loginSelectors } from "./auth_selectors.json";
 
 export class LoginPage {
   verifyLoginPageOpenedAfterSignUp() {
@@ -6,23 +6,23 @@ export class LoginPage {
   }
 
   dontHaveAnAccountLink() {
-    cy.get(LoginSelectors.dontHaveAnAccountLink).click();
+    cy.get(loginSelectors.dontHaveAnAccountLink).click();
   }
 
   loginWithEmptyUserNameAndValidPassword(userName, password) {
-    cy.get(LoginSelectors.usernameField).type(userName).clear().blur();
-    cy.get(LoginSelectors.passwordField).type(password);
+    cy.get(loginSelectors.usernameField).type(userName).clear().blur();
+    cy.get(loginSelectors.passwordField).type(password);
   }
 
   loginWithValidEmailAndInvalidPassword(userName, password) {
-    cy.get(LoginSelectors.usernameField).type(userName);
-    cy.get(LoginSelectors.passwordField).type(password);
-    cy.get(LoginSelectors.loginBtn).click();
+    cy.get(loginSelectors.usernameField).type(userName);
+    cy.get(loginSelectors.passwordField).type(password);
+    cy.get(loginSelectors.loginBtn).click();
   }
 
   //   login(userName, password) {
-  //     cy.get(LoginSelectors.usernameField).type(userName);
-  //     cy.get(LoginSelectors.passwordField).type(password);
-  //     cy.get(LoginSelectors.loginBtn).click();
+  //     cy.get(loginSelectors.usernameField).type(userName);
+  //     cy.get(loginSelectors.passwordField).type(password);
+  //     cy.get(loginSelectors.loginBtn).click();
   //   }
 }
