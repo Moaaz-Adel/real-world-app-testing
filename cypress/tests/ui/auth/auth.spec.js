@@ -32,6 +32,8 @@ describe("Auth Tests", () => {
       signUpPage.haveAnAccount();
       cy.location("pathname").should("equal", "/signin");
     });
+
+    it("Should display 'Sign in' validation errors", () => {});
   });
 
   context("Login Tests", () => {
@@ -58,16 +60,20 @@ describe("Auth Tests", () => {
       cy.location("pathname").should("equal", "/signup");
     });
 
-    it.only("Validations on 'Sign in' fields", () => {
+    it.only("Should display 'Sign in' validation errors", () => {
       cy.visit("/signin");
       loginPage.loginWithEmptyUserNameAndValidPassword(userNameForLogin, "s3cret");
-      cy.get(LoginSelectors.emptyUserNameValidationMessage).should("be.visible");
+      cy.get(LoginSelectors.emptyUserNameValidationMessage)
+        .should("be.visible")
+        .and("contain", "Username is required");
       cy.get(LoginSelectors.loginBtn).should("have.attr", "disabled");
 
       cy.visit("/signin");
       loginPage.loginWithEmptyUserNameAndValidPassword(userNameForLogin, "12");
       cy.get(LoginSelectors.rememberMeOption).click();
-      cy.get(LoginSelectors.passwordMinimumCharactersValidationMessage).should("be.visible");
+      cy.get(LoginSelectors.passwordMinimumCharactersValidationMessage)
+        .should("be.visible")
+        .and("contain", "Password must contain at least 4 characters");
       cy.get(LoginSelectors.loginBtn).should("have.attr", "disabled");
     });
 
