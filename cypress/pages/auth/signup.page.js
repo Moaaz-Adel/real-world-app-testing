@@ -1,18 +1,18 @@
 /// <reference types="cypress"/>
 
-import { SignUpSelectors } from "./auth_selectors";
+import { signUpSelectors } from "./auth_selectors.json";
 
 export class SignUpPage {
   signUp(firstName, lastName, userName, userPass) {
-    cy.get(SignUpSelectors.firstNameField).type(firstName);
-    cy.get(SignUpSelectors.lastNameField).type(lastName);
-    cy.get(SignUpSelectors.userNameField).type(userName);
-    cy.get(SignUpSelectors.passwordField).type(userPass);
-    cy.get(SignUpSelectors.confirmPasswordField).type(userPass);
-    cy.get(SignUpSelectors.signUpButton).click();
+    cy.get(signUpSelectors.firstNameField).type(firstName);
+    cy.get(signUpSelectors.lastNameField).type(lastName);
+    cy.get(signUpSelectors.userNameField).type(userName);
+    cy.get(signUpSelectors.passwordField).type(userPass);
+    cy.get(signUpSelectors.confirmPasswordField).type(userPass);
+    cy.get(signUpSelectors.signUpButton).click();
   }
 
   haveAnAccount() {
-    cy.contains("a", SignUpSelectors.haveAnAccountRedirectionButton).click();
+    cy.contains("a", signUpSelectors.haveAnAccountRedirectionButton).click();
   }
 }

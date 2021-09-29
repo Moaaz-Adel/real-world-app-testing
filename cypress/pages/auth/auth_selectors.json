@@ -1,0 +1,27 @@
+{
+  "loginSelectors": {
+    "usernameField": "#username",
+    "passwordField": "#password",
+    "loginBtn": "[data-test=\"signin-submit\"]",
+    "rememberMeOption": "[name=\"remember\"]",
+    "signUpLink": "[data-test=\"signup\"]",
+    "emptyUserNameValidationMessage": "#username-helper-text",
+    "passwordMinimumCharactersValidationMessage": "#password-helper-text",
+    "dontHaveAnAccountLink": "[data-test=\"signup\"]",
+    "signInErrorMessage": "[data-test=\"signin-error\"]"
+  },
+  "signUpSelectors": {
+    "firstNameField": "#firstName",
+    "lastNameField": "#lastName",
+    "userNameField": "#username",
+    "passwordField": "#password",
+    "confirmPasswordField": "#confirmPassword",
+    "signUpButton": "[data-test=\"signup-submit\"]",
+    "haveAnAccountRedirectionButton": "Have an account? Sign In",
+    "emptyFirstNameValidation": "#firstName-helper-text",
+    "emptyLastNameValidation": "#lastName-helper-text",
+    "emptyUserNameValidation": "#username-helper-text",
+    "emptyPasswordValidation": "#password-helper-text",
+    "confirmPasswordValidation": "#confirmPassword-helper-text"
+  }
+}

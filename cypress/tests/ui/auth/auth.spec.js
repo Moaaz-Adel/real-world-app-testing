@@ -1,12 +1,12 @@
 /// <reference types="cypress"/>
 
 import { SignUpPage } from "../../../pages/auth/signup.page";
-
-import * as faker from "faker";
 import { LoginPage } from "../../../pages/auth/login.page";
 import { users } from "../../../../data/database.json";
 import { LandingPage } from "../../../pages/landing_page/landing_page.page";
-import { LoginSelectors } from "../../../pages/auth/auth_selectors";
+import { loginSelectors } from "../../../pages/auth/auth_selectors.json";
+import { signUpSelectors } from "../../../pages/auth/auth_selectors.json";
+import * as faker from "faker";
 
 const signUpPage = new SignUpPage();
 const loginPage = new LoginPage();
@@ -33,7 +33,40 @@ describe("Auth Tests", () => {
       cy.location("pathname").should("equal", "/signin");
     });
 
-    it("Should display 'Sign in' validation errors", () => {});
+    it.only("Should display 'Sign up' validation errors", () => {
+      cy.visit("/signup");
+      cy.get(signUpSelectors.firstNameField).type("First").clear().blur();
+      cy.get(signUpSelectors.emptyFirstNameValidation)
+        .should("be.visible")
+        .and("contain", "First Name is required");
+
+      cy.get(signUpSelectors.lastNameField).type("Last").clear().blur();
+      cy.get(signUpSelectors.emptyLastNameValidation)
+        .should("be.visible")
+        .and("contain", "Last Name is required");
+
+      cy.get(signUpSelectors.userNameField).type("UserName").clear().blur();
+      cy.get(signUpSelectors.emptyUserNameValidation)
+        .should("be.visible")
+        .and("contain", "Username is required");
+
+      cy.get(signUpSelectors.passwordField).type("Password").clear().blur();
+      cy.get(signUpSelectors.emptyPasswordValidation)
+        .should("be.visible")
+        .and("contain", "Enter your password");
+
+      cy.get(signUpSelectors.confirmPasswordField).type("ConfirmPassword").clear().blur();
+      cy.get(signUpSelectors.confirmPasswordValidation)
+        .should("be.visible")
+        .and("contain", "Confirm your password");
+
+      cy.get(signUpSelectors.confirmPasswordField).type("Not Match");
+      cy.get(signUpSelectors.confirmPasswordValidation)
+        .should("be.visible")
+        .and("contain", "Password does not match");
+
+      cy.get(signUpSelectors.signUpButton).should("have.attr", "disabled");
+    });
   });
 
   context("Login Tests", () => {
@@ -63,24 +96,24 @@ describe("Auth Tests", () => {
     it.only("Should display 'Sign in' validation errors", () => {
       cy.visit("/signin");
       loginPage.loginWithEmptyUserNameAndValidPassword(userNameForLogin, "s3cret");
-      cy.get(LoginSelectors.emptyUserNameValidationMessage)
+      cy.get(loginSelectors.emptyUserNameValidationMessage)
         .should("be.visible")
         .and("contain", "Username is required");
-      cy.get(LoginSelectors.loginBtn).should("have.attr", "disabled");
+      cy.get(loginSelectors.loginBtn).should("have.attr", "disabled");
 
       cy.visit("/signin");
       loginPage.loginWithEmptyUserNameAndValidPassword(userNameForLogin, "12");
-      cy.get(LoginSelectors.rememberMeOption).click();
-      cy.get(LoginSelectors.passwordMinimumCharactersValidationMessage)
+      cy.get(loginSelectors.rememberMeOption).click();
+      cy.get(loginSelectors.passwordMinimumCharactersValidationMessage)
         .should("be.visible")
         .and("contain", "Password must contain at least 4 characters");
-      cy.get(LoginSelectors.loginBtn).should("have.attr", "disabled");
+      cy.get(loginSelectors.loginBtn).should("have.attr", "disabled");
     });
 
     it("Try login with valid userName and invalid Password", () => {
       cy.visit("/signin");
       loginPage.loginWithValidEmailAndInvalidPassword(userNameForLogin, "InvalidPass");
-      cy.get(LoginSelectors.signInErrorMessage).should("be.visible");
+      cy.get(loginSelectors.signInErrorMessage).should("be.visible");
     });
   });
 
