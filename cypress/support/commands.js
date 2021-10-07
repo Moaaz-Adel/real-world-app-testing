@@ -1,6 +1,4 @@
-import { LoginSelectors } from "./../pages/auth/auth_selectors";
-
-// ***********************************************
+import { loginSelectors } from "./../pages/auth/auth_selectors.json";
 // This example commands.js shows you how to
 // create various custom commands and overwrite
 // existing commands.
@@ -25,14 +23,29 @@ import { LoginSelectors } from "./../pages/auth/auth_selectors";
 //
 // -- This will overwrite an existing command --
 // Cypress.Commands.overwrite('visit', (originalFn, url, options) => { ... })
-Cypress.Commands.add("login", (userName, password, { rememberUser = false } = {}) => {
+
+Cypress.Commands.add("loginByUI", (userName, password, { rememberUser = false } = {}) => {
   cy.visit("/signin");
-  cy.get(LoginSelectors.usernameField).type(userName);
-  cy.get(LoginSelectors.passwordField).type(password);
+  cy.get(loginSelectors.usernameField).type(userName);
+  cy.get(loginSelectors.passwordField).type(password);
   if (rememberUser) {
-    cy.get(LoginSelectors.rememberMeOption).click();
+    cy.get(loginSelectors.rememberMeOption).click();
   }
-  cy.get(LoginSelectors.loginBtn).click();
+  cy.get(loginSelectors.loginBtn).click();
+});
+
+Cypress.Commands.add("loginByAPI", (userName, password, { rememberUser = false } = {}) => {
+  const apiHost = Cypress.env("apiUrl");
+  const loginEndPoint = "/login";
+  return cy.request({
+    method: "POST",
+    url: `${apiHost}${loginEndPoint}`,
+    body: {
+      username: userName,
+      password: password,
+      type: "password",
+    },
+  });
 });
 
 // Cypress.Commands.add("database", (operation, entity, query, logTask = false) => {
