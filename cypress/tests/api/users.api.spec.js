@@ -1,4 +1,6 @@
 import { users } from "../../../data/database.json";
+import * as fakeUser from "faker";
+import { method } from "lodash-es";
 const apiUsers = `${Cypress.env("apiUrl")}/users`;
 
 const userNameForLogin = users[0].username;
@@ -6,6 +8,14 @@ const userId = users[0].id;
 const email = users[0].email;
 const phoneNumber = users[1].phoneNumber;
 const userNameForSearch = users[1].username;
+const userIdForUpdate = users[1].id;
+
+let userToBeRegistered = {
+  firstName: fakeUser.name.firstName(),
+  lastName: fakeUser.name.lastName(),
+  username: fakeUser.internet.userName(),
+  password: fakeUser.internet.password(),
+};
 
 describe("Testing Users API", () => {
   beforeEach("Authorize user", () => {
@@ -42,7 +52,7 @@ describe("Testing Users API", () => {
     });
   });
 
-  context("Get /users/profile/username", () => {
+  context("GET /users/profile/username", () => {
     it("Should retrieve user profile info successfully", () => {
       cy.request({
         method: "GET",
@@ -88,14 +98,53 @@ describe("Testing Users API", () => {
         expect(res.body.results[0]).to.have.property("firstName");
       });
     });
+
+    context("PATCH /users/userId", () => {
+      it("Should update a user successfully", () => {
+        cy.request({
+          method: "PATCH",
+          url: `${apiUsers}/${userIdForUpdate}`,
+          body: {
+            firstName: fakeUser.name.firstName(),
+          },
+        }).then((res) => {
+          expect(res.status).to.eq(204);
+        });
+      });
+    });
   });
 });
 
-describe("UnAuthenticated user", () => {
-  it("Should NOT shows any user for the UnAuthenticated user", () => {
-    cy.request({ method: "GET", url: apiUsers, failOnStatusCode: false }).then((res) => {
-      expect(res.status).to.eq(401);
-      expect(res.body).to.have.property("error");
+describe("POST /users", () => {
+  it("Should register a new user successfully with all valid fields", () => {
+    cy.request({
+      method: "POST",
+      url: `${apiUsers}/`,
+      body: userToBeRegistered,
+    }).then((res) => {
+      cy.pause();
+      expect(res.status).to.eq(201);
+    });
+
+    it.only("Should get error when invalid key sent", () => {
+      cy.request({
+        method: "POST",
+        url: `${apiUsers}`,
+        body: { invalidKey: "Invalid" },
+        failOnStatusCode: false,
+      }).then((res) => {
+        expect(res.status).to.eq(422);
+        expect(res.body.errors.length).to.eq(1);
+      });
+    });
+  });
+
+  describe("UnAuthenticated user", () => {
+    it("Should NOT shows any user for the UnAuthenticated user", () => {
+      cy.request({ method: "GET", url: apiUsers, failOnStatusCode: false }).then((res) => {
+        expect(res.status).to.eq(401);
+        expect(res.body).to.have.property("error");
+      });
     });
   });
 });

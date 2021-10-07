@@ -16,7 +16,7 @@ const userNameForLogin = users[0].username;
 
 describe("Auth Tests", () => {
   context("SignUp Tests", () => {
-    it("Successfully SignUp as a new User", () => {
+    it.only("Successfully SignUp as a new User", () => {
       cy.visit("/signup");
       signUpPage.signUp(
         faker.name.firstName(),
@@ -33,7 +33,7 @@ describe("Auth Tests", () => {
       cy.location("pathname").should("equal", "/signin");
     });
 
-    it.only("Should display 'Sign up' validation errors", () => {
+    it("Should display 'Sign up' validation errors", () => {
       cy.visit("/signup");
       cy.get(signUpSelectors.firstNameField).type("First").clear().blur();
       cy.get(signUpSelectors.emptyFirstNameValidation)
