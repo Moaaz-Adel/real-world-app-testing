@@ -77,13 +77,13 @@ describe("Auth Tests", () => {
 
     it("Should redirect the user to 'Home Page' after providing valid email and pass", () => {
       // loginPage.login(users[0].username, "s3cret");
-      cy.login(userNameForLogin, "s3cret", { rememberUser: false });
+      cy.loginByUI(userNameForLogin, "s3cret", { rememberUser: false });
       cy.location("pathname").should("equal", "/");
       landingPage.verifyLoggedInUser(userNameForLogin);
     });
 
     it("Should remember the logged in user to 30 days", () => {
-      cy.login(userNameForLogin, "s3cret", { rememberUser: true });
+      cy.loginByUI(userNameForLogin, "s3cret", { rememberUser: true });
       cy.getCookie("connect.sid").should("have.property", "expiry");
     });
 
@@ -119,7 +119,7 @@ describe("Auth Tests", () => {
 
   context("Logout from Landing Page", () => {
     it("Should logout the user from Landing page", () => {
-      cy.login(userNameForLogin, "s3cret", { rememberUser: false });
+      cy.loginByUI(userNameForLogin, "s3cret", { rememberUser: false });
       landingPage.logout();
       cy.location("pathname").should("equal", "/signin");
     });
